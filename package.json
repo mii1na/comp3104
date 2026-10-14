@@ -22,7 +22,7 @@
   "bugs": {
     "url": "https://github.com/mii1na/comp3104/issues"
   },
-  "homepage": "https://github.com/mii1na/comp3104",
+  "homepage": "https://mii1na.github.io/comp3104",
   "dependencies": {
     "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^6.9.1",
