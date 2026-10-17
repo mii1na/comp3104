@@ -1,35 +1,36 @@
-# This is a basic workflow to help you get started with Actions
+# COMP3104 GitHub Actions Workflow
 
 name: Deploy React App COMP3104 DevOps Project CI
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 
-# Controls when the workflow will run
-on:
-  # Triggers the workflow on pull request events but only for the "main" branch
-  pull_request:
-    branches: [ "main" ]
+# Allow GitHub Actions to publish the website
+permissions:
+  contents: write
 
-  # Allows you to run this workflow manually from the Actions tab
+# Controls when the workflow runs
+on:
+  push:
+    branches: ["main"]
+
+  pull_request:
+    branches: ["main"]
+
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # Step 1: Checkout repository
       - uses: actions/checkout@v4
 
-      # Step 2: Set up the Node.js environment
+      # Step 2: Set up Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22' # Specify your required Node version
-          cache: 'npm'       # Automatically caches npm dependencies
+          node-version: '22'
+          cache: 'npm'
 
       # Step 3: Install dependencies
       - name: Install dependencies
@@ -39,8 +40,13 @@ jobs:
       - name: Run tests
         run: npm test
 
-      # Step 5:Deploy to GitHub Pages
+      # Step 5: Build React application
+      - name: Build React app
+        run: npm run build
+
+      # Step 6: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
